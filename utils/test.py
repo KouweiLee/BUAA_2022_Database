@@ -1,0 +1,11 @@
+# goods=[]
+# addgoods=input('请输入您想要添加的物品')
+# goods.append(addgoods)
+goods = list(map(str, input('请输入您想要添加的物品').split(',')))
+print('您已添加成功')
+print(goods)
+print('现有以下物品'+str(goods))
+scgoods=input('输入删除物品:')
+goods.remove(scgoods)
+# print('删除后物品还有：'+goods)
+print("删除后物品还有", goods)
