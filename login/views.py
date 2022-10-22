@@ -11,7 +11,6 @@ class Login(View):
         print(request)
         username = request.get("username")
         password = request.get("password")
-        print("login", username, password)
         try:
             sqlHelper = SqlHelper()
             result = sqlHelper.select('tb_user', ["password", "user_type"], {"username":username})

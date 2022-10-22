@@ -11,8 +11,6 @@ class AddTitle(View):
         title = request.get("title")
         content = request.get("content")
         username = request.get("name")
-        print("username", username)
-        print("title", title)
         try:
             sqlHelper = SqlHelper()
             now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -34,7 +32,7 @@ class DeleteTitle(View):
         try:
             sqlHelper = SqlHelper()
             params = [title_id]
-            sqlHelper.executeProcedure("deletetitle", params)
+            sqlHelper.delete("", params)
             res['code'] = 200
         except Exception as e:
             print(e)
@@ -44,7 +42,7 @@ class DeleteTitle(View):
 
 class AddComment(View):
     def post(self, request):
-        res = {'code': 400, 'msg': '增加评论成功', 'data': []}
+        res = {'code': 400, 'msg': '增加评论成功', 'data': {}}
         request = getRequest(request)
         title_id = request.get("title_id")
         content = request.get("content")
@@ -52,65 +50,28 @@ class AddComment(View):
         commentatee_name = request.get("beCommentator_name")
         try:
             sqlHelper = SqlHelper()
-            params = [title_id, content, username, getNowTime(), commentatee_name]
+            nowtime = getNowTime()
+            params = [title_id, content, username, nowtime, commentatee_name]
             sqlHelper.executeProcedure("addcomment", params)
             res['code'] = 200
+            res['data']["time"]= nowtime
         except:
             res['msg'] = "增加评论失败"
         return JsonResponse(res)
 
-
-# class QueryAllTitle(View):
-#     def post(self, request):
-
 class DeleteComment(View):
     def post(self, request):
         res = {'code': 400, 'msg': '删除评论成功', 'data': []}
-        print(request.body)
         request = getRequest(request)
-        print(request)
-        comment_id = request.get("comment_id")
-        print(comment_id)
+        comment_id = int(request.get("comment_id"))
         try:
             sqlHelper = SqlHelper()
-            params = [comment_id]
-            sqlHelper.executeProcedure("deletecomment", params)
+            cond = {"id":comment_id}
+            sqlHelper.delete("dc_comment", cond)
             res['code'] = 200
         except:
             res['msg'] = "删除评论失败"
         return JsonResponse(res)
-
-
-# class QueryAllTitle(View):
-#     def post(self, request):
-#         res = {'code': 400, 'msg': '查询所有主题帖成功', 'data': []}
-#         try:
-#             sqlHelper = SqlHelper()
-#             sql = "select t.id, t.title, t.content, date_format(t.time,'%Y-%m-%d %H:%i:%s'), u.name, u.user_type " \
-#                   "from dc_title as t, tb_user as u " \
-#                   "where t.username = u.username"
-#             results = sqlHelper.executeSql(sql)
-#             for ares in results:
-#                 dic = {"id": ares[0],
-#                        "isTop": 'false',
-#                        "isOver": 'true',
-#                        "submitNumber": 100,
-#                        "replyNumber": 25,
-#                        "title": ares[1],
-#                        "url": "404",
-#                        "content": ares[2],
-#                        "tags": ['P7'],
-#                        "time": ares[3],
-#                        "name": ares[4]
-#                        # "member_type":ares[5]
-#                        }
-#                 print(dic)
-#                 res['data'].append(dic)
-#             res['code'] = 200
-#         except Exception as e:
-#             res['msg'] = "查询所有主题帖失败"
-#         return JsonResponse(res)
-
 
 class QueryOneTitle(View):
     def post(self, request):
@@ -129,19 +90,22 @@ class QueryOneTitle(View):
                    "time": ares[3],
                    "member_name": ares[4],
                    "member_type": ares[5]}
-            res['data'].append(dic)
-            sql = "select c.id, c.content, date_format(c.time,'%Y-%m-%d %H:%i:%s'), u.name, u.user_type " \
+            res['data'] = dic
+            sql = "select c.id, c.content, date_format(c.time,'%Y-%m-%d %H:%i:%s'), u.name, u.user_type, c.commentatee_name " \
                   "from dc_comment as c, tb_user as u " + \
-                  (
-                              "where c.id in (select comment_id from dc_com2title where title_id = %d) and c.username = u.username" % title_id)
+                  ("where c.id in (select comment_id from dc_com2title where title_id = %d) and c.username = u.username" % title_id)
             results = sqlHelper.executeSql(sql)
+            comments = []
             for ares in results:
                 dic = {"comment_id": ares[0],
                        "content": ares[1],
                        "time": ares[2],
-                       "member_name": ares[3],
-                       "member_type": ares[4]}
-                res['data'].append(dic)
+                       "commentator_name": ares[3],
+                       "member_type": ares[4],
+                       "beCommentator_name":ares[5]
+                       }
+                comments.append(dic)
+            res['data']['comments'] = comments
             res['code'] = 200
             print(res)
         except Exception as e:
@@ -161,7 +125,7 @@ class QueryTitle(View):
             sqlHelper = SqlHelper()
             sql = "select t.id, t.title, t.content, date_format(t.time,'%Y-%m-%d %H:%i:%s'), u.name, u.user_type " \
                   "from dc_title as t, tb_user as u " + (
-                              "where t.username = u.username and t.title like \'%s%%\'" % query_string)
+                              "where t.username = u.username and t.title like \'%%s%%\'" % query_string)
             results = sqlHelper.executeSql(sql)
             for ares in results:
                 dic = {"id": ares[0],
