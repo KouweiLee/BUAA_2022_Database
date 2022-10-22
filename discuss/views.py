@@ -28,11 +28,11 @@ class DeleteTitle(View):
     def post(self, request):
         res = {'code': 400, 'msg': '删除主题帖成功', 'data': []}
         request = getRequest(request)
-        title_id = request.get("title_id")
+        title_id = int(request.get("title_id"))
         try:
             sqlHelper = SqlHelper()
-            params = [title_id]
-            sqlHelper.delete("", params)
+            cond = {"id": title_id}
+            sqlHelper.delete("dc_title", cond)
             res['code'] = 200
         except Exception as e:
             print(e)
@@ -125,7 +125,7 @@ class QueryTitle(View):
             sqlHelper = SqlHelper()
             sql = "select t.id, t.title, t.content, date_format(t.time,'%Y-%m-%d %H:%i:%s'), u.name, u.user_type " \
                   "from dc_title as t, tb_user as u " + (
-                              "where t.username = u.username and t.title like \'%%s%%\'" % query_string)
+                              "where t.username = u.username and t.title like \'%%%s%%\'" % query_string)
             results = sqlHelper.executeSql(sql)
             for ares in results:
                 dic = {"id": ares[0],
@@ -136,6 +136,7 @@ class QueryTitle(View):
                        # "member_type": ares[5]
                        }
                 res['data'].append(dic)
+            print(res['data'])
             res['code'] = 200
         except Exception as e:
             print(e)
