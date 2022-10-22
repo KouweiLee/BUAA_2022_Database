@@ -10,4 +10,5 @@ def getRequest(request):
     获取预处理后的request
     """
     request = str(request.body).replace("true", "True").replace("false", "False")
+
     return eval(eval(request))

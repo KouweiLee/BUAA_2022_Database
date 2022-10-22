@@ -48,10 +48,11 @@ class AddComment(View):
         request = getRequest(request)
         title_id = request.get("title_id")
         content = request.get("content")
-        username = request.get("username")
+        username = request.get("commentator_id")
+        commentatee_name = request.get("beCommentator_name")
         try:
             sqlHelper = SqlHelper()
-            params = [title_id, content, username, getNowTime()]
+            params = [title_id, content, username, getNowTime(), commentatee_name]
             sqlHelper.executeProcedure("addcomment", params)
             res['code'] = 200
         except:
@@ -65,8 +66,11 @@ class AddComment(View):
 class DeleteComment(View):
     def post(self, request):
         res = {'code': 400, 'msg': '删除评论成功', 'data': []}
+        print(request.body)
         request = getRequest(request)
+        print(request)
         comment_id = request.get("comment_id")
+        print(comment_id)
         try:
             sqlHelper = SqlHelper()
             params = [comment_id]
@@ -112,7 +116,7 @@ class QueryOneTitle(View):
     def post(self, request):
         res = {'code': 400, 'msg': '进入主题帖成功', 'data': []}
         request = getRequest(request)
-        title_id = request.get("title_id")
+        title_id = int(request.get("title_id"))
         try:
             sqlHelper = SqlHelper()
             sql = "select t.id, t.title, t.content, date_format(t.time,'%Y-%m-%d %H:%i:%s'), u.name, u.user_type " \
@@ -139,6 +143,7 @@ class QueryOneTitle(View):
                        "member_type": ares[4]}
                 res['data'].append(dic)
             res['code'] = 200
+            print(res)
         except Exception as e:
             print(e)
             res['msg'] = "进入单个主题帖失败"
