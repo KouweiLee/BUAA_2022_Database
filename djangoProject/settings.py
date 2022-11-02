@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'login.apps.LoginConfig',  # 添加该行
     'discuss.apps.DiscussConfig',  # 添加该行
+    'course.apps.ClassConfig',  # 添加该行
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

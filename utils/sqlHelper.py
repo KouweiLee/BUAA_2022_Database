@@ -80,6 +80,11 @@ class SqlHelper():
         self.executeCommit(sql)
 
     def insert(self, table, params_dict:dict):
+        """插入数据
+        :param table: 表名
+        :param params_dict: {属性列名:常量}
+        :return:
+        """
         key = []
         value = []
         for k, v in params_dict.items():
@@ -94,10 +99,24 @@ class SqlHelper():
         self.executeCommit(sql)
 
     def select(self, table, listnames=None, cond_dict=None, all=False):
-        if all:
+        """
+        分有三种情况:
+            1. all为True, 其余为None, 此时查询全表内容
+            2. all为True, cond_dict不为None, 此时查询符合条件的所有列
+            3. all为false, 则按列和条件查找
+        :param table:
+        :param listnames:
+        :param cond_dict:
+        :param all:
+        :return:
+        """
+        if all and (cond_dict is None):
             sql = 'select * from ' + table
             return self.executeSql(sql)
-        sql = 'select ' + ','.join(listnames) + ' from ' + table#涉及到表属性名的不加引号
+        elif all:
+            sql = 'select * from ' + table
+        else :
+            sql = 'select ' + ','.join(listnames) + ' from ' + table#涉及到表属性名的不加引号
         consql = ""
         if cond_dict is not None:
             consql = " where "

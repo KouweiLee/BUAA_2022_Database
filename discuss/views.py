@@ -74,6 +74,9 @@ class DeleteComment(View):
         return JsonResponse(res)
 
 class QueryOneTitle(View):
+    """
+    进入单个主题帖, 展示该主题帖下的评论等
+    """
     def post(self, request):
         res = {'code': 400, 'msg': '进入主题帖成功', 'data': []}
         request = getRequest(request)
@@ -115,6 +118,8 @@ class QueryOneTitle(View):
 
 
 class QueryTitle(View):
+    """按名称查找主题帖, 同时可用于所有主题帖的查询
+    """
     def post(self, request):
         res = {'code': 400, 'msg': '按名查询主题帖成功', 'data': []}
         query_string = eval(request.body)
