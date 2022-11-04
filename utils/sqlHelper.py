@@ -1,5 +1,6 @@
 # import pymysql
 from django.db import connection
+from utils.funcs import *
 class SqlHelper():
     def __init__(self):
         """
@@ -94,7 +95,7 @@ class SqlHelper():
             if isinstance(v, str):
                 value.append('\'' + v + '\'')
             else :
-                value.append(v)
+                value.append(str(v))
         sql = 'insert into %s' % table
         sql += '(' + ','.join(key) + ')' + ' values(' + ','.join(value) + ')'
         print('insert:' + sql)
@@ -143,7 +144,7 @@ class SqlHelper():
             return records
         except Exception as e:
             error = '执行sql语句失败(%s): %s' % (e.args[0], e.args[1])
-            print(error)
+            putError(error)
             raise e
 
     def executeCommit(self, sql):
@@ -158,7 +159,7 @@ class SqlHelper():
         except Exception as e:
             self.con.rollback()
             error = '执行数据库sql语句失败(%s): %s' % (e.args[0], e.args[1])
-            print("error:", error)
+            putError(error)
             raise error
 
     # def closeDataBase(self):
