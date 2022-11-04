@@ -14,7 +14,7 @@ class SqlHelper():
         except:
             print("DataBase connect error,please check the db config.")
 
-    def executeProcedure(self, pname, params):
+    def executeProcedure(self, pname, params:list):
         """
         执行存储过程\n
         :param pname: 存储过程名
@@ -24,6 +24,8 @@ class SqlHelper():
         try:
             print(pname, params)
             self.cursor.callproc(pname, params)
+            records = self.cursor.fetchall()
+            return records
         except Exception as e:
             print(e)
             raise e
