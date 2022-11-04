@@ -58,7 +58,7 @@ class ClickCourse(View):
         id = int(request.get("id"))
         try:
             sqlHelper = SqlHelper()
-            ares = sqlHelper.select(CLASS, cond_dict={"id": id}, all=True)[0]
+            ares = sqlHelper.select(TB_CLASS, cond_dict={"id": id}, all=True)[0]
             dic = {"id": ares[0],
                    "name": ares[1],
                    "description": ares[2],
@@ -99,7 +99,7 @@ class ChangeCourse(View):
                 "exam": exam,
                 "pingshi": pingshi}
             cond = {"id": id}
-            sqlHelper.update(CLASS, attr_dict, cond)
+            sqlHelper.update(TB_CLASS, attr_dict, cond)
             res['code'] = 200
         except Exception as e:
             print(e)
@@ -118,7 +118,7 @@ class DeleteCourse(View):
         id = int(request.get("id"))
         try:
             sqlHelper = SqlHelper()
-            sqlHelper.delete(CLASS, {"id": id})
+            sqlHelper.delete(TB_CLASS, {"id": id})
             res['code'] = 200
         except Exception as e:
             print(e)
@@ -134,7 +134,7 @@ class ChooseCourse(View):
         class_id = int(request.get("class_id"))
         try:
             sqlHelper = SqlHelper()
-            sqlHelper.insert(CLASS_USER, {"username": username, "class_id": class_id})
+            sqlHelper.insert(TB_CLASS_USER, {"username": username, "class_id": class_id})
             res['code'] = 200
         except Exception as e:
             putError(e)

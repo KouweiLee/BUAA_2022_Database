@@ -2,6 +2,8 @@ from django.views import View
 from utils.sqlHelper import SqlHelper
 from django.http import JsonResponse
 from utils.funcs import *
+import os
+from utils.Def import *
 class Login(View):
     def post(self, request):
         # 仅在登录成功时返回200
@@ -77,4 +79,26 @@ class ChangePassWord(View):
         return JsonResponse(res)
 
 
-# Create your views here.
+class UploadHeader(View):
+    """上传用户头像
+    """
+    def post(self, request):
+        res = {'code': 400, 'msg': '上传头像成功', 'data': []}
+        try:
+            file = request.FILES.get('file')
+            username = request.POST.get('username')
+            print("username", username)
+            head_path = HEADER_ROOT
+            print("head_path", head_path)
+            if not os.path.exists(head_path):
+                os.makedirs(head_path)
+            file_name = username + ".jpg"
+            file_path = head_path + "\\" + file_name
+            with open(file_path, 'wb') as f:
+                for chunk in file.chunks():
+                    f.write(chunk)
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = "上传作业失败"
+        return JsonResponse(res)

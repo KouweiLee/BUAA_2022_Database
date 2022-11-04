@@ -58,7 +58,7 @@ class ClickCourse(View):
         id = int(request.get("id"))
         try:
             sqlHelper = SqlHelper()
-            ares = sqlHelper.select(CLASS, cond_dict={"id": id}, all=True)[0]
+            ares = sqlHelper.select(TB_CLASS, cond_dict={"id": id}, all=True)[0]
             dic = {"id": ares[0],
                    "name": ares[1],
                    "description": ares[2],
@@ -99,7 +99,7 @@ class ChangeCourse(View):
                 "exam": exam,
                 "pingshi": pingshi}
             cond = {"id": id}
-            sqlHelper.update(CLASS, attr_dict, cond)
+            sqlHelper.update(TB_CLASS, attr_dict, cond)
             res['code'] = 200
         except Exception as e:
             print(e)
@@ -118,7 +118,7 @@ class DeleteCourse(View):
         id = int(request.get("id"))
         try:
             sqlHelper = SqlHelper()
-            sqlHelper.delete(CLASS, {"id": id})
+            sqlHelper.delete(TB_CLASS, {"id": id})
             res['code'] = 200
         except Exception as e:
             print(e)
@@ -159,7 +159,7 @@ class ClickWork(View):  # 还未验证
         id = int(request.get("id"))
         try:
             sqlHelper = SqlHelper()
-            ares = sqlHelper.select(HOMEWORK, cond_dict={"id": id}, all=True)[0]
+            ares = sqlHelper.select(TB_HOMEWORK, cond_dict={"id": id}, all=True)[0]
             res['data'] = {"id": ares[0],
                            "name": ares[1],
                            "content": ares[2],
@@ -190,7 +190,7 @@ class ChangeWork(View):
                          "begin_time": begin_time,
                          "end_time": end_time,
                          "content": content}
-            sqlHelper.update(HOMEWORK, attr_dict, {"id": id})
+            sqlHelper.update(TB_HOMEWORK, attr_dict, {"id": id})
             res['code'] = 200
         except Exception as e:
             print("Error: ", e)
@@ -205,7 +205,7 @@ class DeleteWork(View):
         id = request.get("id")  # 作业id
         try:
             sqlHelper = SqlHelper()
-            sqlHelper.delete(HOMEWORK, {"id": id})
+            sqlHelper.delete(TB_HOMEWORK, {"id": id})
             res['code'] = 200
         except Exception as e:
             print(e)
