@@ -8,6 +8,7 @@ HEADER_ROOT = os.path.join(PROJECT_DIR, HEADER_URL)
 HOMEWORK_ROOT = os.path.join(PROJECT_DIR, HOMEWORK_URL)
 # HOMEWORK_ROOT = PROJECT_DIR + HOMEWORK_URL
 """数据库表"""
+VIEW_HOMEWORK_USER = "view_homework_user"
 TB_CLASS = "cl_class"
 TB_HOMEWORK = "cl_homework"
 TB_CLASS_USER = "cl_class_user"

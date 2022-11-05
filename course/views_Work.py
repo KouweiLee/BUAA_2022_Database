@@ -123,7 +123,6 @@ class GetAllWorks(View):
 class UploadWork(View):
     """用户上传自己的作业
     """
-
     def post(self, request):
         res = {'code': 400, 'msg': '上传作业成功', 'data': []}
         try:
@@ -135,21 +134,50 @@ class UploadWork(View):
             if not os.path.exists(head_path):
                 os.makedirs(head_path)
             # 文件名由username和homework_id来组成
-            file_name = username + "_" + homework_id + file.name.split(".")[1]
+            file_name = username + "_" + str(homework_id) + file.name.split(".")[1]
             file_path = head_path + "\\" + file_name
             with open(file_path, 'wb') as f:
                 for chunk in file.chunks():
                     f.write(chunk)
             sqlHelper = SqlHelper()
-            sqlHelper.executeProcedure()
+            sqlHelper.executeProcedure("addHomeWorkRecord", [username, homework_id, getNowTime()])
             res['code'] = 200
         except BaseException as e:
             print(e)
             res['msg'] = "上传作业失败"
         return JsonResponse(res)
 
+class CorrectWorks(View):
+    """获取所有作业附件
+    """
+    def post(self, request):
+        res = {'code': 400, 'msg': '获取所有作业附件成功', 'data': []}
+        request = getRequest(request)
+        homework_id = int(request.get("id"))
+        try:
+            sqlHelper = SqlHelper()
+            attachments = []
+            results = sqlHelper.select(VIEW_HOMEWORK_USER, cond_dict={"homework_id":homework_id},all =True)
+            for ares in results:
+                adic = {"attachment_id":ares[0],
+                        "username":ares[2],
+                        "name":ares[3],
+                        "time":ares[4],
+                        "score":ares[5]}
+                attachments.append(adic)
+            res['data'] = {"id":homework_id,
+                           "attachments":attachments}
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = "获取所有作业附件失败"
+        return JsonResponse(res)
 
-"""
+# class DeleteWork(View):
+#     def post(self, request):
+#         res = {'code': 400, 'msg': '获取所有作业附件成功', 'data': []}
+#         request = getRequest(request)
+"""         
 def upload(request):
     # 获取相对路径
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

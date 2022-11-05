@@ -10,6 +10,8 @@ create table if not exists tb_user(
     name varchar(50) default '佚名' not null
 );
 
+# alter table tb_user add column header varchar(100);
+
 drop table dc_title;
 drop table dc_comment;
 drop table dc_com2title;

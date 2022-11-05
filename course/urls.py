@@ -16,4 +16,5 @@ urlpatterns = [
     path('work/change/', views_Work.ChangeWork.as_view(), name='changeWork'),
     path('work/delete/', views_Work.DeleteWork.as_view(), name='deleteWork'),
     path('work/upload/', views_Work.UploadWork.as_view(), name='uploadWork'),
+    path('work/correcting/', views_Work.CorrectWorks.as_view(), name='correctWork'),
 ]
