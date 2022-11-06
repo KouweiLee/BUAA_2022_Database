@@ -140,3 +140,69 @@ class ChooseCourse(View):
             putError(e)
             res['msg'] = "选课失败"
         return JsonResponse(res)
+# 课程附件区
+class GetAllAttachments(View):
+    """
+    当点击课程附件区时, 获取所有课程附件
+    """
+    def post(self, request):
+        res = {'code': 400, 'msg': '获取所有课程附件成功', 'data': []}
+        request = getRequest(request)
+        id = int(request.get("id"))#课程id
+        try:
+            sqlHelper = SqlHelper()
+            results = sqlHelper.select(VIEW_MATERIAL_CLASS, ["attachment_id", "name", "time"], {"class_id":id})
+            attachments = []
+            for ares in results:
+                adic = {"attachment_id":ares[0],
+                        "name":ares[1],
+                        "time":ares[2]}
+                attachments.append(adic)
+            res['data'] = {"id":id,
+                           "attachments":attachments}
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = "获取所有课程附件失败"
+        return JsonResponse(res)
+
+class UploadAttachment(View):
+    """上传课程附件"""
+    #TODO:暂未验证是否正确
+    def post(self, request):
+        res = {'code': 400, 'msg': '上传课程附件成功', 'data': []}
+        try:
+            file = request.FILES.get('file')
+            class_id = int(request.POST.get('class_id'))
+            head_path = MATERIAL_ROOT
+            print("head_path", head_path)
+            if not os.path.exists(head_path):
+                os.makedirs(head_path)
+            nosuffixName = file.name.split(".")[0]
+            file_name = str(class_id) + "_" + nosuffixName + "." + file.name.split(".")[1]
+            file_path = head_path + "\\" + file_name
+            with open(file_path, 'wb') as f:
+                for chunk in file.chunks():
+                    f.write(chunk)
+            sqlHelper = SqlHelper()
+            sqlHelper.executeProcedure("addMaterial", [class_id, file.name, getNowTime()])
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = "上传课程附件失败"
+        return JsonResponse(res)
+
+class DeleteAttachment(View):
+    """删除课程附件"""
+    def post(self, request):
+        res = {'code': 400, 'msg': '删除课程附件成功', 'data': []}
+        request = getRequest(request)
+        id = int(request.get("id"))
+        try:
+            sqlHelper = SqlHelper()
+            sqlHelper.delete(TB_MATERIAL, {"id":id})
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = "删除课程附件成功"
+        return JsonResponse(res)

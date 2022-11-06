@@ -4,12 +4,16 @@ from pathlib import Path
 PROJECT_DIR = Path(__file__).resolve().parent.parent
 HOMEWORK_URL = 'upload\\homeworks'
 HEADER_URL = 'upload\\headers'
+MATERIAL_URL = 'upload\\materials'
 HEADER_ROOT = os.path.join(PROJECT_DIR, HEADER_URL)
 HOMEWORK_ROOT = os.path.join(PROJECT_DIR, HOMEWORK_URL)
+MATERIAL_ROOT = os.path.join(PROJECT_DIR, MATERIAL_URL)
 # HOMEWORK_ROOT = PROJECT_DIR + HOMEWORK_URL
 """数据库表"""
 VIEW_HOMEWORK_USER = "view_homework_user"
+VIEW_MATERIAL_CLASS = "view_material_class"
 TB_CLASS = "cl_class"
 TB_HOMEWORK = "cl_homework"
 TB_CLASS_USER = "cl_class_user"
 TB_HOMEWORK_USER = "cl_homework_user"
+TB_MATERIAL = "cl_material"

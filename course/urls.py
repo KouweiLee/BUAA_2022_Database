@@ -17,4 +17,9 @@ urlpatterns = [
     path('work/delete/', views_Work.DeleteWork.as_view(), name='deleteWork'),
     path('work/upload/', views_Work.UploadWork.as_view(), name='uploadWork'),
     path('work/correcting/', views_Work.CorrectWorks.as_view(), name='correctWork'),
+    path('work/deleteRecord/', views_Work.DeleteWorkRecord.as_view(), name='deleteWorkRecord'),
+    path('work/score/', views_Work.GiveScore2Work.as_view(), name='giveScore2Work'),
+    path('attachment/all/', views_Course.GetAllAttachments.as_view(), name='getAllAttachments'),
+    path('attachment/upload/', views_Course.UploadAttachment.as_view(), name='UploadAttachment'),
+    path('attachment/delete/', views_Course.DeleteAttachment.as_view(), name='DeleteAttachment'),
 ]

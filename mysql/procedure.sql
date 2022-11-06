@@ -103,9 +103,33 @@ begin
 end$$
 delimiter ;
 
+-- 增加课程附件
+delimiter $$
+# drop procedure addwork;
+create procedure addMaterial(in pClass_id int, in pname varchar(100), in ptime datetime)
+begin
+    declare vMaterial_id int;
+    -- 当发生错误时, error会被自动记为1
+    declare error int default 0;
+    declare continue handler for sqlexception set error=1;
+    -- 开始事务, 保证要么全体成功, 要么全体失败
+    start transaction ;
+        insert into cl_material (name, time) values (pname, ptime);
+        set vMaterial_id = @@identity; -- 获得上一步插入的id
+        insert into cl_class_material(class_id, material_id) values (pClass_id, vMaterial_id);
+    if error = 1 then
+        select error;
+        rollback ;
+    else
+        commit ;
+    end if ;
+end$$
+DELIMITER ;
+
 call selectAllClasses('123', false);
 call selectAllWorks(3);
 call addHomeWorkRecord('123', 5, '2022-11-05 20:32:36');
+call addMaterial(5, '测试点', '2022-11-05 20:32:00');
 # delimiter $$
 # drop procedure deletecomment;
 # create procedure deletecomment(in pComment_id int)

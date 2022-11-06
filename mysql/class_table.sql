@@ -73,3 +73,12 @@ create table if not exists cl_class_material
     foreign key (class_id) references cl_class (id) on delete cascade,
     foreign key (material_id) references cl_material (id) on delete cascade
 );
+
+create view view_homework_user (attachment_id, homework_id, username, name, time, score)as
+    (select id, homework_id, work.username, name, last_time, score from cl_homework_user as work, tb_user as user
+     where work.username = user.username);
+
+create view view_material_class (attachment_id, name, time, class_id)
+    as (select m.id, m.name, m.time, r.class_id
+        from cl_material as m, cl_class_material as r
+        where m.id = r.material_id);

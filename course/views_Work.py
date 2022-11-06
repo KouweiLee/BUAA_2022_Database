@@ -6,12 +6,10 @@ from django.http import JsonResponse
 from utils.funcs import *
 from utils.Def import *
 
-
 class AddWork(View):
     """
     添加作业, 前端传作业名和课程id
     """
-
     def post(self, request):
         res = {'code': 400, 'msg': '添加作业成功', 'data': []}
         request = getRequest(request)
@@ -134,7 +132,7 @@ class UploadWork(View):
             if not os.path.exists(head_path):
                 os.makedirs(head_path)
             # 文件名由username和homework_id来组成
-            file_name = username + "_" + str(homework_id) + file.name.split(".")[1]
+            file_name = username + "_" + str(homework_id) + "." + file.name.split(".")[1]
             file_path = head_path + "\\" + file_name
             with open(file_path, 'wb') as f:
                 for chunk in file.chunks():
@@ -173,32 +171,33 @@ class CorrectWorks(View):
             res['msg'] = "获取所有作业附件失败"
         return JsonResponse(res)
 
-# class DeleteWork(View):
-#     def post(self, request):
-#         res = {'code': 400, 'msg': '获取所有作业附件成功', 'data': []}
-#         request = getRequest(request)
-"""         
-def upload(request):
-    # 获取相对路径
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    if request.method == 'POST':
-        file = request.FILES.get('file', None)
-        # 设置文件上传文件夹
-        head_path = BASE_DIR + "\\upload\\json"
-        print("head_path", head_path)
-        # 判断是否存在文件夹, 如果没有就创建文件路径
-        if not os.path.exists(head_path):
-            os.makedirs(head_path)
-        file_suffix = file.name.split(".")[1]  # 获取文件后缀
-        # 储存路径
-        file_path = head_path + "\\{}".format("head." + file_suffix)
-        file_path = file_path.replace(" ", "")
-        with open(file_path, 'wb') as f:
-            for chunk in file.chunks():
-                f.write(chunk)
-        message = {}
-        message['code'] = 200
-        # 返回图片路径
-        message['fileurl'] = file_path
-        return JsonResponse(message)
-"""""
+class DeleteWorkRecord(View):
+    def post(self, request):
+        res = {'code': 400, 'msg': '删除作业附件成功', 'data': []}
+        request = getRequest(request)
+        id = int(request.get("id"))
+        try:
+            sqlHelper = SqlHelper()
+            sqlHelper.delete(TB_HOMEWORK_USER, {"id":id})
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = "删除作业附件成功"
+        return JsonResponse(res)
+
+class GiveScore2Work(View):
+    """给作业一个分数
+    """
+    def post(self, request):
+        res = {'code': 400, 'msg': '批改作业成功', 'data': []}
+        request = getRequest(request)
+        id = request.get("id")
+        score = request.get("score")
+        try:
+            sqlHelper = SqlHelper()
+            sqlHelper.update(TB_HOMEWORK_USER, {"score":score}, {"id":id})
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = "批改作业失败"
+        return JsonResponse(res)
