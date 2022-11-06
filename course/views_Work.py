@@ -6,6 +6,8 @@ from django.http import JsonResponse
 from utils.funcs import *
 from utils.Def import *
 
+from rest_framework.views import APIView
+
 class AddWork(View):
     """
     添加作业, 前端传作业名和课程id
@@ -200,4 +202,15 @@ class GiveScore2Work(View):
         except BaseException as e:
             print(e)
             res['msg'] = "批改作业失败"
+        return JsonResponse(res)
+
+class DownloadOne(APIView):
+    """下载单个作业附件"""
+    def post(self, request):
+        res = {'code': 400, 'msg': '下载作业失败', 'data': []}
+        filename = request.data.get("id")
+        file_path = os.path.join(HOMEWORK_ROOT, "图像0000.jpg")
+        response = big_file_download(file_path, "图像0000.jpg")
+        if response:
+            return response
         return JsonResponse(res)

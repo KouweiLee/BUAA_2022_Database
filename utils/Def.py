@@ -2,12 +2,13 @@ import os
 from pathlib import Path
 """项目路径"""
 PROJECT_DIR = Path(__file__).resolve().parent.parent
-HOMEWORK_URL = 'upload\\homeworks'
-HEADER_URL = 'upload\\headers'
-MATERIAL_URL = 'upload\\materials'
-HEADER_ROOT = os.path.join(PROJECT_DIR, HEADER_URL)
-HOMEWORK_ROOT = os.path.join(PROJECT_DIR, HOMEWORK_URL)
-MATERIAL_ROOT = os.path.join(PROJECT_DIR, MATERIAL_URL)
+DOWNLOAD_DIR = os.path.join(PROJECT_DIR, "upload")
+HOMEWORK_URL = 'homeworks'
+HEADER_URL = 'headers'
+MATERIAL_URL = 'materials'
+HEADER_ROOT = os.path.join(DOWNLOAD_DIR, HEADER_URL)
+HOMEWORK_ROOT = os.path.join(DOWNLOAD_DIR, HOMEWORK_URL)
+MATERIAL_ROOT = os.path.join(DOWNLOAD_DIR, MATERIAL_URL)
 # HOMEWORK_ROOT = PROJECT_DIR + HOMEWORK_URL
 """数据库表"""
 VIEW_HOMEWORK_USER = "view_homework_user"
