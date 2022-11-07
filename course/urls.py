@@ -23,4 +23,5 @@ urlpatterns = [
     path('attachment/all/', views_Course.GetAllAttachments.as_view(), name='getAllAttachments'),
     path('attachment/upload/', views_Course.UploadAttachment.as_view(), name='UploadAttachment'),
     path('attachment/delete/', views_Course.DeleteAttachment.as_view(), name='DeleteAttachment'),
+    path('attachment/downloadOne/', views_Course.DownloadAttachment.as_view(), name='DeleteAttachment'),
 ]

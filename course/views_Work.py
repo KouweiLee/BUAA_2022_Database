@@ -121,7 +121,7 @@ class GetAllWorks(View):
 
 
 class UploadWork(View):
-    """用户上传自己的作业
+    """用户上传自己的作业, 作业名命名格式: username_workId.xxx
     """
     def post(self, request):
         res = {'code': 400, 'msg': '上传作业成功', 'data': []}
@@ -140,7 +140,7 @@ class UploadWork(View):
                 for chunk in file.chunks():
                     f.write(chunk)
             sqlHelper = SqlHelper()
-            sqlHelper.executeProcedure("addHomeWorkRecord", [username, homework_id, getNowTime()])
+            sqlHelper.executeProcedure("addHomeWorkRecord", [username, homework_id, getNowTime(), file_name])
             res['code'] = 200
         except BaseException as e:
             print(e)
@@ -208,9 +208,16 @@ class DownloadOne(APIView):
     """下载单个作业附件"""
     def post(self, request):
         res = {'code': 400, 'msg': '下载作业失败', 'data': []}
-        filename = request.data.get("id")
-        file_path = os.path.join(HOMEWORK_ROOT, "图像0000.jpg")
-        response = big_file_download(file_path, "图像0000.jpg")
+        id = int(request.data.get("id"))
+        filename = ""
+        try:
+            sqlHelper = SqlHelper()
+            filename = sqlHelper.select(TB_HOMEWORK_USER, ["name"], {"homework_id":id})[0][0]
+        except BaseException as e:
+            print(e)
+            return JsonResponse(res)
+        file_path = os.path.join(HOMEWORK_ROOT, filename)
+        response = big_file_download(file_path, filename)
         if response:
             return response
         return JsonResponse(res)

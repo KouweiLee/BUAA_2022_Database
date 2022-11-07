@@ -1,4 +1,6 @@
 from django.views import View
+from rest_framework.views import APIView
+
 from utils.sqlHelper import SqlHelper
 from django.http import JsonResponse
 from utils.funcs import *
@@ -180,12 +182,12 @@ class UploadAttachment(View):
                 os.makedirs(head_path)
             nosuffixName = file.name.split(".")[0]
             file_name = str(class_id) + "_" + nosuffixName + "." + file.name.split(".")[1]
-            file_path = head_path + "\\" + file_name
+            file_path = os.path.join(head_path, file_name)
             with open(file_path, 'wb') as f:
                 for chunk in file.chunks():
                     f.write(chunk)
             sqlHelper = SqlHelper()
-            sqlHelper.executeProcedure("addMaterial", [class_id, file.name, getNowTime()])
+            sqlHelper.executeProcedure("addMaterial", [class_id, file_name, getNowTime()])
             res['code'] = 200
         except BaseException as e:
             print(e)
@@ -205,4 +207,21 @@ class DeleteAttachment(View):
         except BaseException as e:
             print(e)
             res['msg'] = "删除课程附件成功"
+        return JsonResponse(res)
+
+class DownloadAttachment(APIView):
+    """下载单个课程附件"""
+    def post(self, request):
+        res = {'code': 400, 'msg': '下载课程附件失败', 'data': []}
+        id = int(request.data.get("id"))
+        try:
+            sqlHelper = SqlHelper()
+            filename = sqlHelper.select(TB_MATERIAL, ["name"], {"id":id})[0][0]
+        except BaseException as e:
+            print(e)
+            return JsonResponse(res)
+        file_path = os.path.join(MATERIAL_ROOT, filename)
+        response = big_file_download(file_path, filename)
+        if response:
+            return response
         return JsonResponse(res)
