@@ -20,14 +20,14 @@ class GetAllCourses(View):
             results = sqlHelper.executeProcedure("selectAllClasses", [username, True])
 
             for ares in results:
-                dic = {"id": ares[0], "name": ares[1], "isChoosed": 1}  # 用0/1传
+                dic = {"id": ares[0], "name": ares[1], "isChoosed": True}  # 用0/1传
                 res['data'].append(dic)
             # sql = "select id, name from cl_class where id not in " \
             #       "(select class_id from cl_class_user where username = \'%s\')" % username
             # results = sqlHelper.executeSql(sql)
             results = sqlHelper.executeProcedure("selectAllClasses", [username, False])
             for ares in results:
-                dic = {"id": ares[0], "name": ares[1], "isChoosed": 0}  # 用0/1传
+                dic = {"id": ares[0], "name": ares[1], "isChoosed": False}  # 用0/1传
                 res['data'].append(dic)
             res['code'] = 200
         except Exception as e:
@@ -142,6 +142,22 @@ class ChooseCourse(View):
             putError(e)
             res['msg'] = "选课失败"
         return JsonResponse(res)
+
+class QuitCourse(View):
+    def post(self, request):
+        res = {'code': 400, 'msg': '退课成功', 'data': []}
+        request = getRequest(request)
+        username = request.get("username")
+        class_id = int(request.get("class_id"))
+        try:
+            sqlHelper = SqlHelper()
+            sqlHelper.delete(TB_CLASS_USER, {"username":username, "class_id":class_id})
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = "退课成功"
+        return JsonResponse(res)
+
 # 课程附件区
 class GetAllAttachments(View):
     """
@@ -162,6 +178,7 @@ class GetAllAttachments(View):
                 attachments.append(adic)
             res['data'] = {"id":id,
                            "attachments":attachments}
+            print(res['data'])
             res['code'] = 200
         except BaseException as e:
             print(e)

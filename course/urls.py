@@ -10,6 +10,7 @@ urlpatterns = [
     path('course/change/', views_Course.ChangeCourse.as_view(), name='changeCourse'),
     path('course/delete/', views_Course.DeleteCourse.as_view(), name='deleteCourse'),
     path('course/choose/', views_Course.ChooseCourse.as_view(), name='chooseCourse'),
+    path('course/quit/', views_Course.QuitCourse.as_view(), name='chooseCourse'),
     path('work/all/', views_Work.GetAllWorks.as_view(), name='getallwork'),
     path('work/single/', views_Work.ClickWork.as_view(), name='clickWork'),
     path('work/addone/', views_Work.AddWork.as_view(), name='addWork'),
