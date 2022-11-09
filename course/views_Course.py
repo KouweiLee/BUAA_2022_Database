@@ -91,6 +91,7 @@ class ChangeCourse(View):
         description = request.get("description")
         exam = int(request.get("exam"))
         pingshi = int(request.get("pingshi"))
+        description = description.replace('\'', '\\\'')
         try:
             sqlHelper = SqlHelper()
             attr_dict = {
