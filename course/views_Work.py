@@ -134,7 +134,7 @@ class UploadWork(View):
             if not os.path.exists(head_path):
                 os.makedirs(head_path)
             # 文件名由username和homework_id来组成
-            file_name = username + "_" + str(homework_id) + "." + file.name.split(".")[1]
+            file_name = username + "_" + str(homework_id) + "_" + file.name
             file_path = head_path + "\\" + file_name
             with open(file_path, 'wb') as f:
                 for chunk in file.chunks():
@@ -209,10 +209,12 @@ class DownloadOne(APIView):
     def post(self, request):
         res = {'code': 400, 'msg': '下载作业失败', 'data': []}
         id = int(request.data.get("id"))
+        print(id)
         filename = ""
         try:
             sqlHelper = SqlHelper()
-            filename = sqlHelper.select(TB_HOMEWORK_USER, ["name"], {"homework_id":id})[0][0]
+            filename = sqlHelper.select(TB_HOMEWORK_USER, ["name"], {"id":id})[0][0]
+            print(filename)
         except BaseException as e:
             print(e)
             return JsonResponse(res)
