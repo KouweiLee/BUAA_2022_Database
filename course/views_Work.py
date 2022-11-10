@@ -64,6 +64,7 @@ class ChangeWork(View):
         begin_time = request.get("begin_time")
         end_time = request.get("end_time")
         content = request.get("content")
+        content = content.replace('\'', '\\\'')
         try:
             sqlHelper = SqlHelper()
             attr_dict = {"name": name,
