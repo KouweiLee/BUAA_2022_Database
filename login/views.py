@@ -102,3 +102,11 @@ class UploadHeader(View):
             print(e)
             res['msg'] = "上传作业失败"
         return JsonResponse(res)
+
+# class GetAllPics(View):
+#     """获取用户所有图片的url
+#     """
+#     def post(self, request):
+#         res = {'code': 400, 'msg': '获取所有图片成功', 'data': []}
+#         try:
+#             sqlHelper = SqlHelper()

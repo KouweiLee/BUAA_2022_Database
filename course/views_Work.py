@@ -122,7 +122,7 @@ class GetAllWorks(View):
 
 
 class UploadWork(View):
-    """用户上传自己的作业, 作业名命名格式: username_workId.xxx
+    """用户上传自己的作业, 作业名命名格式: username_workId_filename
     """
     def post(self, request):
         res = {'code': 400, 'msg': '上传作业成功', 'data': []}
@@ -164,7 +164,8 @@ class CorrectWorks(View):
                         "username":ares[2],
                         "name":ares[3],
                         "time":ares[4],
-                        "score":ares[5]}
+                        "score":ares[5],
+                        "filename": ares[6]}
                 attachments.append(adic)
             res['data'] = {"id":homework_id,
                            "attachments":attachments}
