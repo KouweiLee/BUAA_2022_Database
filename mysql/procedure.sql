@@ -87,14 +87,16 @@ end$$
 delimiter ;
 
 delimiter $$
-create procedure addHomeWorkRecord(in pusername varchar(100), in phomework_id int, in ptime datetime)
+# drop procedure addHomeWorkRecord;
+-- on duplicate key实现: 若当前表已经存在username和homework_id对应的记录, 则更新; 否则, 则插入
+create procedure addHomeWorkRecord(in pusername varchar(100), in phomework_id int, in ptime datetime, in pname varchar(500))
 begin
     declare error int default 0;
     declare continue handler for sqlexception set error=1;
 
     start transaction ;
-    insert into cl_homework_user(username, homework_id, last_time) values (pusername, phomework_id, ptime)
-    on duplicate key update last_time = ptime;
+    insert into cl_homework_user(username, homework_id, last_time, filename) values (pusername, phomework_id, ptime, ptime)
+    on duplicate key update last_time = ptime, filename = pname;
     if error = 1 then
         rollback ;
     else

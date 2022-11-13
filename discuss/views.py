@@ -128,7 +128,7 @@ class QueryTitle(View):
         print("queryString", query_string)
         try:
             sqlHelper = SqlHelper()
-            sql = "select t.id, t.title, t.content, date_format(t.time,'%Y-%m-%d %H:%i:%s'), u.name, u.user_type " \
+            sql = "select t.id, t.title, t.content, date_format(t.time,'%Y-%m-%d %H:%i:%s'), u.name, u.user_type, t.numofcoms " \
                   "from dc_title as t, tb_user as u " + (
                               "where t.username = u.username and t.title like \'%%%s%%\'" % query_string)
             results = sqlHelper.executeSql(sql)
@@ -137,7 +137,8 @@ class QueryTitle(View):
                        "title": ares[1],
                        "content": ares[2],
                        "time": ares[3],
-                       "name": ares[4]
+                       "name": ares[4],
+                       "numofcoms": ares[6]
                        # "member_type": ares[5]
                        }
                 res['data'].append(dic)
@@ -152,22 +153,23 @@ class QueryTitle(View):
         res = {'code': 400, 'msg': '查询所有主题帖成功', 'data': []}
         try:
             sqlHelper = SqlHelper()
-            sql = "select t.id, t.title, t.content, date_format(t.time,'%Y-%m-%d %H:%i:%s'), u.name, u.user_type " \
+            sql = "select t.id, t.title, t.content, date_format(t.time,'%Y-%m-%d %H:%i:%s'), u.name, u.user_type, t.numofcoms " \
                   "from dc_title as t, tb_user as u " \
                   "where t.username = u.username"
             results = sqlHelper.executeSql(sql)
             for ares in results:
                 dic = {"id": ares[0],
-                       "isTop": 'false',
-                       "isOver": 'true',
-                       "submitNumber": 100,
-                       "replyNumber": 25,
+                       # "isTop": 'false',
+                       # "isOver": 'true',
+                       # "submitNumber": 100,
+                       # "replyNumber": 25,
                        "title": ares[1],
-                       "url": "404",
+                       # "url": "404",
                        "content": ares[2],
-                       "tags": ['P7'],
+                       # "tags": ['P7'],
                        "time": ares[3],
-                       "name": ares[4]
+                       "name": ares[4],
+                       "numofcoms": ares[6]
                        # "member_type":ares[5]
                        }
                 print(dic)

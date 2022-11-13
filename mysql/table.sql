@@ -9,7 +9,9 @@ create table if not exists tb_user(
     user_type varchar(10) default 'stu',
     name varchar(50) default '佚名' not null
 );
-
+alter table tb_user add column numOfTitles int default 0;
+alter table tb_user add column numOfComs int default 0;
+alter table tb_user add column photo varchar(100);
 # alter table tb_user add column header varchar(100);
 
 drop table dc_title;
@@ -24,6 +26,10 @@ create table if not exists dc_title(
     username varchar(100),
     foreign key(username) references tb_user(username) on delete cascade
 );
+
+-- 创建对title的索引, 便于查询
+create index ti on dc_title(title);
+alter table dc_title add column numofcoms int default 0;
 
 create table dc_comment(
     id int primary key auto_increment,
@@ -41,3 +47,7 @@ create table dc_com2title(
     foreign key (title_id) references dc_title(id) on delete cascade ,
     foreign key (comment_id) references dc_comment(id) on delete cascade
 );
+
+show index from tb_user;
+show index from dc_comment;
+show index from dc_com2title;

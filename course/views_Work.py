@@ -28,7 +28,7 @@ class AddWork(View):
         return JsonResponse(res)
 
 
-class ClickWork(View):  # 还未验证
+class ClickWork(View):
     """
     点击具体作业, 前端向后端传作业id, 后端返回该作业的具体信息
     """
@@ -44,7 +44,8 @@ class ClickWork(View):  # 还未验证
                            "name": ares[1],
                            "content": ares[2],
                            "begin_time": ares[3],
-                           "end_time": ares[4]}
+                           "end_time": ares[4],
+                           "average":ares[5]}
             res['code'] = 200
         except Exception as e:
             print(e)

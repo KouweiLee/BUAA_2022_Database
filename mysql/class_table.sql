@@ -28,7 +28,7 @@ create table if not exists cl_homework
     begin_time datetime,
     end_time   datetime
 );
-
+alter table cl_homework add column averageScore int default 0;
 #选课表
 create table if not exists cl_class_user
 (
@@ -58,12 +58,13 @@ create table if not exists cl_homework_user
     homework_id   int,
     score         int,
     last_time     datetime,
-    homework_path varchar(500),
+    filename varchar(500),
     foreign key (username) references tb_user (username) on delete cascade,
     foreign key (homework_id) references cl_homework (id) on delete cascade
 );
 -- 增加唯一约束, 使得username和homework_id只能在表中出现一次
 alter table cl_homework_user add constraint onlyone unique (username, homework_id);
+delete from cl_homework_user where id = 9;
 #课程-附件表
 create table if not exists cl_class_material
 (
@@ -74,8 +75,9 @@ create table if not exists cl_class_material
     foreign key (material_id) references cl_material (id) on delete cascade
 );
 
-create view view_homework_user (attachment_id, homework_id, username, name, time, score)as
-    (select id, homework_id, work.username, name, last_time, score from cl_homework_user as work, tb_user as user
+drop view view_homework_user;
+create view view_homework_user (attachment_id, homework_id, username, name, time, score, filename)as
+    (select id, homework_id, work.username, user.name, last_time, score, filename from cl_homework_user as work, tb_user as user
      where work.username = user.username);
 
 create view view_material_class (attachment_id, name, time, class_id)
