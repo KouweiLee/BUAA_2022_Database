@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from utils.funcs import *
 import os
 from utils.Def import *
+from django.contrib.auth.hashers import make_password, check_password
+
 class Login(View):
     def post(self, request):
         # 仅在登录成功时返回200
@@ -18,7 +20,7 @@ class Login(View):
             result = sqlHelper.select('tb_user', ["password", "user_type"], {"username":username})
             if result:
                 key = result[0][0]
-                if key == password:
+                if check_password(password, key):
                     res['code']=200
                     res['data'].append({"user_type":result[0][1]})
                     return JsonResponse(res)
@@ -44,7 +46,8 @@ class Register(View):
             if result:
                 res['msg'] = "用户名重复"
                 return JsonResponse(res)
-            dic = {"username":username, "password":password}
+            encrypt_password = make_password(password, None, "pbkdf2_sha1")
+            dic = {"username":username, "password":encrypt_password}
             sqlHelper.insert("tb_user", dic)
         except Exception as e:
             print(e)
@@ -65,7 +68,7 @@ class ChangePassWord(View):
             result = sqlHelper.select('tb_user', listnames=["password"], cond_dict={"username":username})
             if result:
                 result = result[0]
-                if result[0]==pre_password:
+                if check_password(pre_password, result[0]):
                     sqlHelper.update('tb_user', attrs_dict={"password":new_password}, cond_dict={"username":username})
                     res['code']=200
                 else :

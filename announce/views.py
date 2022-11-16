@@ -32,4 +32,43 @@ class GetAllDevelops(View):
             res['msg'] = "获取全部历史信息失败"
         return JsonResponse(res)
 
+class AddDevelop(View):
+    """创建社团发展历史信息"""
+    def post(self, request):
+        res = {'code': 400, 'msg': '创建社团历史信息成功', 'data': []}
+        request = getRequest(request)
+        year = request.get("year")
+        overview = request.get("overview")
+        pics = request.get("pics")
+        print(pics)
+        try:
+            sqlHelper = SqlHelper()
+            sqlHelper.insert(AN_DEVELOPS, {"time":year, "overview":overview})
+            ares = sqlHelper.select(AN_DEVELOPS, listnames=['id'], cond_dict={"time":year})[0][0]
+            for pic in pics:
+                sqlHelper.insert(AN_PICS, {"develop_id":ares, "pic_url":pic})
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = "创建社团历史信息失败"
+        return JsonResponse(res)
 
+class ChangeDevelop(View):
+    """修改社团发展信息"""
+    def post(self,request):
+        res = {'code': 400, 'msg': '修改社团历史信息成功', 'data': []}
+        request = getRequest(request)
+        id = int(request.get("id"))
+        year = request.get("year")
+        overview = request.get("overview")
+        pics = request.get("pics")
+        try:
+            sqlHelper = SqlHelper()
+            sqlHelper.update(AN_DEVELOPS, {"time":year, "overview":overview}, {"id":id})
+            for pic in pics:
+                sqlHelper.insert(AN_PICS, {"pic_url":pic, "develop_id":id})
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = "修改社团历史信息失败"
+        return JsonResponse(res)
