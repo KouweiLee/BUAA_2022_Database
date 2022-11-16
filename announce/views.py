@@ -72,3 +72,39 @@ class ChangeDevelop(View):
             print(e)
             res['msg'] = "修改社团历史信息失败"
         return JsonResponse(res)
+
+class GetAllMembers(View):
+    """获取所有成员信息"""
+    def post(self, request):
+        res = {'code': 400, 'msg': '获取所有成员信息成功', 'data': []}
+        request = getRequest(request)
+        id = int(request.get("id"))
+        try:
+            sqlHelper = SqlHelper()
+            result = sqlHelper.executeProcedure("selectAllMembers", [id])
+            for ares in result:
+                dic = {"name": ares[0],
+                       "profile": ares[1],
+                       "pic": ares[2]}
+                res['data'].append(dic)
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = '获取所有成员信息失败'
+        return JsonResponse(res)
+
+class AddMember(View):
+    """增加成员信息"""
+    def post(self, request):
+        res = {'code': 400, 'msg': '增加成员信息成功', 'data': []}
+        request = getRequest(request)
+        develop_id = int(request.get("develop_id"))
+        username = request.get("username")
+        try:
+            sqlHelper = SqlHelper()
+            sqlHelper.insert(AN_DEVELOP_MEMBER, {"develop_id":develop_id, 'username':username})
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = '增加成员信息失败'
+        return JsonResponse(res)

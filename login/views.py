@@ -106,10 +106,20 @@ class UploadHeader(View):
             res['msg'] = "上传作业失败"
         return JsonResponse(res)
 
-# class GetAllPics(View):
-#     """获取用户所有图片的url
-#     """
-#     def post(self, request):
-#         res = {'code': 400, 'msg': '获取所有图片成功', 'data': []}
-#         try:
-#             sqlHelper = SqlHelper()
+class GetAllPics(View):
+    """获取用户所有图片的url
+    """
+    def post(self, request):
+        res = {'code': 400, 'msg': '获取所有图片成功', 'data': []}
+        request = getRequest(request)
+        username = request.get("username")
+        try:
+            sqlHelper = SqlHelper()
+            result = sqlHelper.select(TB_PICS, ["position"], {"username":username})
+            for ares in result:
+                res['data'].append(ares[0])
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = '获取所有图片失败'
+        return JsonResponse(res)

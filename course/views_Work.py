@@ -56,7 +56,6 @@ class ClickWork(View):
 class ChangeWork(View):
     """修改作业
     """
-
     def post(self, request):
         res = {'code': 400, 'msg': '修改作业成功', 'data': []}
         request = getRequest(request)

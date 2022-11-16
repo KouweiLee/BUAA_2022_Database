@@ -8,5 +8,6 @@ urlpatterns = [
     path('register/', views.Register.as_view(), name='register'),
     path('changepw/', views.ChangePassWord.as_view(), name='changepw'),
     path('upload/', views.UploadHeader.as_view(), name='uploadHeader'),
-    # path('getPics/', views.GetAllPics.as_view(), name='getAllPics'),
+    path('picture/all/', views.GetAllPics.as_view(), name='getAllPics'),
+    # path('picture/upload/', views.AddPic.as_view(), name='getAllPics'),
 ]
