@@ -22,6 +22,7 @@ urlpatterns = [
     path('login/', include('login.urls')),
     path('discuss/', include('discuss.urls')),
     path('course/', include('course.urls')),
+    path('announce/', include('announce.urls')),
     path("admin/", admin.site.urls),
     re_path(r'upload/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
 ]

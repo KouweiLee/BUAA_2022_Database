@@ -128,6 +128,25 @@ begin
 end$$
 DELIMITER ;
 
+# -- 获取社团发展历史信息
+# delimiter $$
+# # drop procedure addwork;
+# create procedure getAllDevelops()
+# begin
+#     -- 当发生错误时, error会被自动记为1
+#     declare error int default 0;
+#     declare continue handler for sqlexception set error=1;
+#     -- 开始事务, 保证要么全体成功, 要么全体失败
+#     start transaction ;
+#         select id, time, overview
+#     if error = 1 then
+#         select error;
+#         rollback ;
+#     else
+#         commit ;
+#     end if ;
+# end$$
+# DELIMITER ;
 call selectAllClasses('123', false);
 call selectAllWorks(3);
 call addHomeWorkRecord('123', 5, '2022-11-05 20:32:36');

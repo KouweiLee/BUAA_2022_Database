@@ -48,6 +48,18 @@ create table dc_com2title(
     foreign key (comment_id) references dc_comment(id) on delete cascade
 );
 
+drop table tb_pics;
+-- 图床表
+create table tb_pics(
+    id int primary key auto_increment,
+    position varchar(100), -- position就是url
+    username varchar(100),
+    foreign key (username) references tb_user(username)
+);
+# drop view view_pics;
+create view view_pics(pic_id, develop_id, position) as
+    (select pic_id, develop_id, position from tb_pics , an_pics
+    where pic_id = tb_pics.id);
 show index from tb_user;
 show index from dc_comment;
 show index from dc_com2title;
