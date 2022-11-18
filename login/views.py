@@ -69,7 +69,8 @@ class ChangePassWord(View):
             if result:
                 result = result[0]
                 if check_password(pre_password, result[0]):
-                    sqlHelper.update('tb_user', attrs_dict={"password":new_password}, cond_dict={"username":username})
+                    encrypt_password = make_password(new_password, None, "pbkdf2_sha1")
+                    sqlHelper.update('tb_user', attrs_dict={"password":encrypt_password}, cond_dict={"username":username})
                     res['code']=200
                 else :
                     res['msg']="原密码错误"

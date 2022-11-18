@@ -99,12 +99,33 @@ class AddMember(View):
         res = {'code': 400, 'msg': '增加成员信息成功', 'data': []}
         request = getRequest(request)
         develop_id = int(request.get("develop_id"))
-        username = request.get("username")
+        usernames = request.get("usernames")
         try:
             sqlHelper = SqlHelper()
-            sqlHelper.insert(AN_DEVELOP_MEMBER, {"develop_id":develop_id, 'username':username})
+            for username in usernames:
+                sqlHelper.insert(AN_DEVELOP_MEMBER, {"develop_id":develop_id, 'username':username})
             res['code'] = 200
         except BaseException as e:
             print(e)
             res['msg'] = '增加成员信息失败'
+        return JsonResponse(res)
+
+class GetAllNames(View):
+    def post(self, request):
+        res = {'code': 400, 'msg': '获取所有用户username和name成功', 'data': []}
+        try:
+            sqlHelper = SqlHelper()
+            result = sqlHelper.select(TB_USERS, ["username", "name"], cond_dict=None)
+            usernames = []
+            names = []
+            print(result)
+            for ares in result:
+                usernames.append(ares[0])
+                names.append(ares[1])
+            res['data'] = {"usernames":usernames,
+                           "names": names}
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = "获取所有用户username和name成功"
         return JsonResponse(res)
