@@ -6,6 +6,8 @@ DOWNLOAD_DIR = os.path.join(PROJECT_DIR, "upload")
 HOMEWORK_URL = 'homeworks'
 HEADER_URL = 'headers'
 MATERIAL_URL = 'materials'
+PIC_URL = "pics"
+PIC_ROOT = os.path.join(DOWNLOAD_DIR, PIC_URL)
 HEADER_ROOT = os.path.join(DOWNLOAD_DIR, HEADER_URL)
 HOMEWORK_ROOT = os.path.join(DOWNLOAD_DIR, HOMEWORK_URL)
 MATERIAL_ROOT = os.path.join(DOWNLOAD_DIR, MATERIAL_URL)
@@ -23,3 +25,6 @@ TB_USERS = "tb_user"
 AN_DEVELOPS = "an_develops"
 AN_PICS = "an_pics"
 AN_DEVELOP_MEMBER = "an_develop_member"
+
+#图片的url前缀
+PIC_PREFIX = "http://127.0.0.1:8000/upload/pics/"

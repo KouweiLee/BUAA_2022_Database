@@ -9,5 +9,5 @@ urlpatterns = [
     path('changepw/', views.ChangePassWord.as_view(), name='changepw'),
     path('upload/', views.UploadHeader.as_view(), name='uploadHeader'),
     path('picture/all/', views.GetAllPics.as_view(), name='getAllPics'),
-    # path('picture/upload/', views.AddPic.as_view(), name='getAllPics'),
+    path('picture/upload/', views.AddPic.as_view(), name='getAllPics'),
 ]

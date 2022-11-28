@@ -1,3 +1,5 @@
+import time
+
 from django.views import View
 from utils.sqlHelper import SqlHelper
 from django.http import JsonResponse
@@ -123,4 +125,34 @@ class GetAllPics(View):
         except BaseException as e:
             print(e)
             res['msg'] = '获取所有图片失败'
+        return JsonResponse(res)
+
+class AddPic(View):
+    """
+    上传用户的图片
+    """
+    def post(self, request):
+        res = {'code': 400, 'msg': '上传图片成功', 'data': []}
+        try:
+            file = request.FILES.get('file')
+            username = request.POST.get('username')
+            print("username", username)
+            pic_path = PIC_ROOT
+            if not os.path.exists(pic_path):
+                os.makedirs(pic_path)
+            file_name = file.name
+            filedate = int(time.time())
+            file_name = str(filedate) + file_name
+            file_path = pic_path + "\\" + file_name
+            with open(file_path, 'wb') as f:
+                for chunk in file.chunks():
+                    f.write(chunk)
+            #开始插入数据库
+            sqlHelper = SqlHelper()
+            position = PIC_PREFIX + file_name
+            sqlHelper.insert(TB_PICS, {"position": position, "username":username})
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = "上传图片失败"
         return JsonResponse(res)
