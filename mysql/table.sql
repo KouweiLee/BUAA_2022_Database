@@ -12,6 +12,7 @@ create table if not exists tb_user(
 alter table tb_user add column numOfTitles int default 0;
 alter table tb_user add column numOfComs int default 0;
 alter table tb_user add column photo varchar(100);
+alter table tb_user add column profile varchar(1000);
 # alter table tb_user add column header varchar(100);
 
 drop table dc_title;
@@ -57,9 +58,10 @@ create table tb_pics(
     foreign key (username) references tb_user(username)
 );
 # drop view view_pics;
-create view view_pics(pic_id, develop_id, position) as
-    (select pic_id, develop_id, position from tb_pics , an_pics
-    where pic_id = tb_pics.id);
+# create view view_pics(pic_id, develop_id, position) as
+#     (select pic_id, develop_id, position from tb_pics , an_pics
+#     where pic_id = tb_pics.id);
+
 show index from tb_user;
 show index from dc_comment;
 show index from dc_com2title;

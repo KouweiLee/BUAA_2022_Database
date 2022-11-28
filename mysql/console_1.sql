@@ -116,18 +116,39 @@ where Cid in (select Cid
               where Tid in
                     (select Tid from teacher where Tname = '雷俊'));
 
-delete from SC where Score >= 90;
+delete
+from SC
+where Score >= 90;
 
-create trigger Tage_tri before insert on teacher
+create trigger Tage_tri
+    before insert
+    on teacher
     for each row
-    begin
-        if NEW.Tage <= 18 then
-            signal sqlstate '45000' set message_text  = 'cannot insert, age error!';
-        end if;
-    end;
+begin
+    if NEW.Tage <= 18 then
+        signal sqlstate '45000' set message_text = 'cannot insert, age error!';
+    end if;
+end;
 
 insert into Student (Sid, Sname, Sgender, Sage)
 values (20372229, '华莱', 'M', 9);
 insert into teacher (Tid, Tname, Tgender, Tage, Temail, Tphone)
 values (123456987, '哈哈哈', 'M', 17, '122223@123.com', '15035660024');
-create index '20373159' on teacher(Tid, Tname, Tage);
+create index '20373159' on teacher (Tid, Tname, Tage);
+
+update Course
+set Ctype = '必修'
+where Cid in (select Cid
+              from (select Cid from Course order by Cid desc limit 2) as a);
+
+update SC
+set Score = 100
+where not exists(
+        select * from (
+        select *
+        from Course
+        where Tid = 123456700
+          and not exists(
+                select * from SC SCY where SCY.Sid = SC.Sid and Cid = Course.Cid
+            )) as a
+    ) and Cid = ANY (select Cid from Course where Tid = 123456700);

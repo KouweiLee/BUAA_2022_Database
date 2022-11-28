@@ -128,6 +128,28 @@ begin
 end$$
 DELIMITER ;
 
+
+-- 获取成员信息
+delimiter $$
+# drop procedure addwork;
+create procedure selectAllMembers(in pDevelop_id int)
+begin
+    declare vMaterial_id int;
+    -- 当发生错误时, error会被自动记为1
+    declare error int default 0;
+    declare continue handler for sqlexception set error=1;
+    -- 开始事务, 保证要么全体成功, 要么全体失败
+    start transaction ;
+    select name, profile, photo from tb_user
+                                where username in (select username from an_develop_member
+                                                                   where develop_id = pDevelop_id);
+    if error = 1 then
+        rollback ;
+    else
+        commit ;
+    end if ;
+end$$
+DELIMITER ;
 # -- 获取社团发展历史信息
 # delimiter $$
 # # drop procedure addwork;
