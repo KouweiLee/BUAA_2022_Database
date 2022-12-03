@@ -11,4 +11,10 @@ urlpatterns = [
     path('picture/all/', views.GetAllPics.as_view(), name='getAllPics'),
     path('picture/upload/', views.AddPic.as_view(), name='getAllPics'),
     path('picture/delete/', views.DeletePic.as_view(), name='getAllPics'),
+    path('user/changeName/', views.ChangeName.as_view(), name='getAllPics'),
+    path('user/changeProfile/', views.ChangeProfile.as_view(), name='getAllPics'),
+    path('user/changeSuper/', views.ChangeSuper.as_view(), name='getAllPics'),
+    path('user/setphoto/', views.SetPhoto.as_view(), name='getAllPics'),
+    path('user/getphoto/', views.GetPhoto.as_view(), name='getAllPics'),
+    path('user/getprofile/', views.GetProfile.as_view(), name='getAllPics'),
 ]

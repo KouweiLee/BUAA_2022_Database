@@ -96,12 +96,17 @@ class GetAllMembers(View):
 class AddMember(View):
     """增加成员信息"""
     def post(self, request):
+        # if request.user.is_authenticated:
+        #     print("hehhe")
+        # else:
+        #     print("no")
         res = {'code': 400, 'msg': '增加成员信息成功', 'data': []}
         request = getRequest(request)
         develop_id = int(request.get("develop_id"))
         usernames = request.get("usernames")
         try:
             sqlHelper = SqlHelper()
+            sqlHelper.delete(AN_DEVELOP_MEMBER, {"develop_id":develop_id})
             for username in usernames:
                 sqlHelper.insert(AN_DEVELOP_MEMBER, {"develop_id":develop_id, 'username':username})
             res['code'] = 200
