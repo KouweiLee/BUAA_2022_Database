@@ -30,6 +30,8 @@ create table if not exists dc_title(
 
 -- 创建对title的索引, 便于查询
 create index ti on dc_title(title);
+-- 创建对图片url的索引, 便于查询
+create index pos on tb_pics(position);
 alter table dc_title add column numofcoms int default 0;
 
 create table dc_comment(

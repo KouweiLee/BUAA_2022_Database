@@ -10,4 +10,5 @@ urlpatterns = [
     path('upload/', views.UploadHeader.as_view(), name='uploadHeader'),
     path('picture/all/', views.GetAllPics.as_view(), name='getAllPics'),
     path('picture/upload/', views.AddPic.as_view(), name='getAllPics'),
+    path('picture/delete/', views.DeletePic.as_view(), name='getAllPics'),
 ]

@@ -156,3 +156,17 @@ class AddPic(View):
             print(e)
             res['msg'] = "上传图片失败"
         return JsonResponse(res)
+
+class DeletePic(View):
+    def post(self, request):
+        res = {'code': 400, 'msg': '删除图片成功', 'data': []}
+        request = getRequest(request)
+        url = request.get("url")
+        try:
+            sqlHelper = SqlHelper()
+            sqlHelper.delete(TB_PICS, {"position":url})
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = "删除图片成功"
+        return JsonResponse(res)
