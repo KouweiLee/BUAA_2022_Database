@@ -117,7 +117,8 @@ res = {'code': 400, 'msg': '删除图片成功', 'data': "用户描述"}
     "msg": "登录成功",
     "data": {
         "isSuperUser": true,
-        "name": "李国玮"
+        "name": "李国玮",
+        "token": "token"
     }
 }
 ```
