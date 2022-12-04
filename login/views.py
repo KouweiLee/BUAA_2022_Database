@@ -12,7 +12,7 @@ from django.contrib.auth.hashers import make_password, check_password
 class Login(View):
     def post(self, request):
         # 仅在登录成功时返回200
-        res = {'code': 400, 'msg': '登录成功', 'data': []}
+        res = {'code': 400, 'msg': '登录成功', 'data': {}}
         request = str(request.body).replace("true", "True")
         request = eval(eval(request))
         print(request)
@@ -20,16 +20,17 @@ class Login(View):
         password = request.get("password")
         try:
             sqlHelper = SqlHelper()
-            result = sqlHelper.select('tb_user', ["password", "isSuperUser"], {"username": username})
+            result = sqlHelper.select('tb_user', ["password", "isSuperUser", "name"], {"username": username})
             if result:
                 key = result[0][0]
                 if check_password(password, key):
                     res['code'] = 200
                     # 是否是超级用户
                     if result[0][1] == 0:
-                        res['data'] = False
+                        res['data']['isSuperUser'] = False
                     else:
-                        res['data'] = True
+                        res['data']['isSuperUser'] = True
+                    res['data']['name'] = result[0][2]
                     return JsonResponse(res)
                 else:
                     res['msg'] = "密码错误"
@@ -289,4 +290,18 @@ class GetProfile(View):
         except BaseException as e:
             print(e)
             res['msg'] = "获取用户描述失败"
+        return JsonResponse(res)
+
+class GetAllSuperUsers(View):
+    def post(self, request):
+        res = {'code': 400, 'msg': '获取所有管理员成功', 'data': []}
+        try:
+            sqlHelper = SqlHelper()
+            results =  sqlHelper.select(TB_USERS, ["username"], {"isSuperUser":1})
+            for ares in results:
+                res['data'].append(ares[0])
+            res['code'] = 200
+        except BaseException as e:
+            print(e)
+            res['msg'] = "获取所有管理员失败"
         return JsonResponse(res)

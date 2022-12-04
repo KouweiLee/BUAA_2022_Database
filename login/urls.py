@@ -17,4 +17,5 @@ urlpatterns = [
     path('user/setphoto/', views.SetPhoto.as_view(), name='getAllPics'),
     path('user/getphoto/', views.GetPhoto.as_view(), name='getAllPics'),
     path('user/getprofile/', views.GetProfile.as_view(), name='getAllPics'),
+    path('getSuperUsers/', views.GetAllSuperUsers.as_view(), name='getAllPics'),
 ]

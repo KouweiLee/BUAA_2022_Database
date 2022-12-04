@@ -32,7 +32,7 @@
 
 ### 修改权限
 
-- [ ] http://localhost:8000/login/user/changeSuper/
+- [x] http://localhost:8000/login/user/changeSuper/
 
 * 前端向后端传
 
@@ -45,7 +45,7 @@
 
 ### 设置头像
 
-- [ ] http://localhost:8000/login/user/setphoto/
+- [x] http://localhost:8000/login/user/setphoto/
 
 * 前端向后端传
 
@@ -62,7 +62,7 @@
 
 ### 获取用户头像
 
-- [ ] http://localhost:8000/login/user/getphoto/
+- [x] http://localhost:8000/login/user/getphoto/
 
 ```
 {
@@ -80,7 +80,7 @@ res = {'code': 400, 'msg': '删除图片成功', 'data': "url"}
 
 ### 获取用户描述
 
-- [ ] http://localhost:8000/login/user/getprofile/
+- [x] http://localhost:8000/login/user/getprofile/
 
 前端传
 
@@ -94,5 +94,45 @@ res = {'code': 400, 'msg': '删除图片成功', 'data': "url"}
 
 ```
 res = {'code': 400, 'msg': '删除图片成功', 'data': "用户描述"}
+```
+
+### 登录
+
+- [x] http://localhost:8000/login/login/
+
+前端传:
+
+```
+{
+    "username" : 用户账号,
+    "password" : 密码
+}
+```
+
+后端传:
+
+```json
+{
+    "code": 200,
+    "msg": "登录成功",
+    "data": {
+        "isSuperUser": true,
+        "name": "李国玮"
+    }
+}
+```
+
+### 获取所有管理员
+
+- [ ] http://localhost:8000/login/getSuperUsers/
+
+后端向前端传
+
+```
+{
+    "code": 200,
+    "msg": "登录成功",
+    "data": ["username1", "username2"]
+}
 ```
 
