@@ -28,7 +28,7 @@ class Login(View):
                         res['data']['isSuperUser'] = False
                     else:
                         res['data']['isSuperUser'] = True
-                    res['data']['token'] = getJwt()
+                    res['data']['token'] = getJwt(res['data']['isSuperUser'])
                     res['data']['name'] = result[0][2]
                     return JsonResponse(res)
                 else:
@@ -123,7 +123,7 @@ class UploadHeader(View):
 class GetAllPics(View):
     """获取用户所有图片的url
     """
-    @user_authenticate()
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '获取所有图片成功', 'data': []}
         request = getRequest(request)
@@ -144,7 +144,7 @@ class AddPic(View):
     """
     上传用户的图片
     """
-    @user_authenticate()
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '上传图片成功', 'data': []}
         try:
@@ -174,7 +174,7 @@ class AddPic(View):
 
 class DeletePic(View):
 
-    @user_authenticate()
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '删除图片成功', 'data': []}
         request = getRequest(request)
@@ -190,7 +190,7 @@ class DeletePic(View):
 
 class ChangeName(View):
     """修改用户名称"""
-    @user_authenticate()
+    @user_authenticate(False)
     def post(self, request):
         # print("requests", request.META.get('HTTP_AUTHORIZATION'))
         res = {'code': 400, 'msg': '修改用户名称成功', 'data': []}
@@ -209,7 +209,7 @@ class ChangeName(View):
 
 class ChangeProfile(View):
     """修改用户描述"""
-    @user_authenticate()
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '修改用户描述成功', 'data': []}
         request = getRequest(request)
@@ -227,7 +227,7 @@ class ChangeProfile(View):
 
 class ChangeSuper(View):
     """修改用户权限"""
-    @user_authenticate()
+    @user_authenticate(True)
     def post(self, request):
         res = {'code': 400, 'msg': '修改用户权限成功', 'data': []}
         request = getRequest(request)
@@ -248,7 +248,7 @@ class ChangeSuper(View):
 
 class SetPhoto(View):
     """设定用户头像"""
-    @user_authenticate()
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '修改用户头像成功', 'data': []}
         request = getRequest(request)
@@ -265,7 +265,7 @@ class SetPhoto(View):
 
 class GetPhoto(View):
     """获取用户头像"""
-    @user_authenticate()
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '获取用户头像成功', 'data': []}
         request = getRequest(request)
@@ -282,7 +282,7 @@ class GetPhoto(View):
 
 class GetProfile(View):
     """获取用户描述"""
-    @user_authenticate()
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '获取用户描述成功', 'data': []}
         request = getRequest(request)
@@ -298,7 +298,7 @@ class GetProfile(View):
         return JsonResponse(res)
 
 class GetAllSuperUsers(View):
-    @user_authenticate()
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '获取所有管理员成功', 'data': []}
         try:

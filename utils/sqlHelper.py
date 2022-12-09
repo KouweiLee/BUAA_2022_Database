@@ -5,7 +5,6 @@ class SqlHelper():
     def __init__(self):
         """
         创建一个SqlHelper
-        :param init: True means initializing the database
         """
         try:
             self.con = connection

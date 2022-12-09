@@ -12,7 +12,10 @@ def result(code=200, message="", data=None, kwargs=None):
     return JsonResponse(json_dict)
 
 
-def user_authenticate():
+def user_authenticate(isNeedAdmin):
+    """
+    :param isNeedAdmin:是否需要管理员权限
+    """
     def decorator(view_func):
         def _wrapped_view(self, request, *args, **kwargs):
             try:
@@ -26,6 +29,8 @@ def user_authenticate():
             if auth[0].lower() == 'token':
                 try:
                     dict = jwt.decode(auth[1], "123456", algorithms=['HS256'])
+                    if isNeedAdmin and dict.get("isAdmin") is False:#如果需要管理员权限，但不是管理员
+                        return result(400,"You are not an Admin!!!")
                 except jwt.ExpiredSignatureError:
                     return result(400, "Token expired")
                 except jwt.InvalidTokenError:
@@ -38,9 +43,9 @@ def user_authenticate():
     return decorator
 
 
-def getJwt():
-    """产生jwt"""
-    pay_load = {"user_id": "db",
+def getJwt(isAdmin):
+    """产生jwt, isAdmin用来判断登录的用户是否是管理员，是一个布尔值"""
+    pay_load = {"isAdmin": isAdmin,
                 'exp': datetime.utcnow() + timedelta(days=1),# 这个地方设置token的过期时间。
                 'iat': datetime.utcnow()}
     token = jwt.encode(payload=pay_load, key="123456", algorithm='HS256')  # 秘钥为123456
