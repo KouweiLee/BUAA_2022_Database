@@ -8,6 +8,7 @@ from utils.Def import *
 
 
 class GetAllCourses(View):
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '获取全部课程成功', 'data': []}
         request = getRequest(request)
@@ -37,6 +38,7 @@ class GetAllCourses(View):
 
 
 class AddCourse(View):
+    @user_authenticate(True)
     def post(self, request):
         res = {'code': 400, 'msg': '添加课程成功', 'data': []}
         request = getRequest(request)
@@ -53,7 +55,7 @@ class AddCourse(View):
 
 class ClickCourse(View):
     """点击单个课程时, 传当前课程的所有信息给前端. 也用于点击课程管理栏"""
-
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '进入课程成功', 'data': []}
         request = getRequest(request)
@@ -80,7 +82,7 @@ class ChangeCourse(View):
     """
     修改课程, 前端向后端传要修改的内容
     """
-
+    @user_authenticate(True)
     def post(self, request):
         res = {'code': 400, 'msg': '修改课程成功', 'data': []}
         request = getRequest(request)
@@ -114,7 +116,7 @@ class DeleteCourse(View):
     """
     删除课程, 前端传id
     """
-
+    @user_authenticate(True)
     def post(self, request):
         res = {'code': 400, 'msg': '删除课程成功', 'data': []}
         request = getRequest(request)
@@ -130,6 +132,7 @@ class DeleteCourse(View):
 
 
 class ChooseCourse(View):
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '选课成功', 'data': []}
         request = getRequest(request)
@@ -145,6 +148,7 @@ class ChooseCourse(View):
         return JsonResponse(res)
 
 class QuitCourse(View):
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '退课成功', 'data': []}
         request = getRequest(request)
@@ -164,6 +168,7 @@ class GetAllAttachments(View):
     """
     当点击课程附件区时, 获取所有课程附件
     """
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '获取所有课程附件成功', 'data': []}
         request = getRequest(request)
@@ -189,6 +194,7 @@ class GetAllAttachments(View):
 class UploadAttachment(View):
     """上传课程附件"""
     #TODO:暂未验证是否正确
+    @user_authenticate(True)
     def post(self, request):
         res = {'code': 400, 'msg': '上传课程附件成功', 'data': []}
         try:
@@ -214,6 +220,7 @@ class UploadAttachment(View):
 
 class DeleteAttachment(View):
     """删除课程附件"""
+    @user_authenticate(True)
     def post(self, request):
         res = {'code': 400, 'msg': '删除课程附件成功', 'data': []}
         request = getRequest(request)
@@ -229,6 +236,7 @@ class DeleteAttachment(View):
 
 class DownloadAttachment(APIView):
     """下载单个课程附件"""
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '下载课程附件失败', 'data': []}
         id = int(request.data.get("id"))

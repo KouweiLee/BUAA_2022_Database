@@ -5,6 +5,7 @@ from utils.funcs import *
 
 
 class AddTitle(View):
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '插入主题帖成功', 'data': []}
         request = getRequest(request)
@@ -13,9 +14,10 @@ class AddTitle(View):
         username = request.get("name")
         try:
             sqlHelper = SqlHelper()
-            now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             dic = {"title": title, "content": content, "username": username,
                    "time": now}
+            print(dic)
             sqlHelper.insert("dc_title", dic)
             res['code'] = 200
         except Exception as e:
@@ -25,6 +27,7 @@ class AddTitle(View):
 
 
 class DeleteTitle(View):
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '删除主题帖成功', 'data': []}
         request = getRequest(request)
@@ -41,6 +44,7 @@ class DeleteTitle(View):
 
 
 class AddComment(View):
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '增加评论成功', 'data': {}}
         request = getRequest(request)
@@ -60,6 +64,7 @@ class AddComment(View):
         return JsonResponse(res)
 
 class DeleteComment(View):
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '删除评论成功', 'data': []}
         request = getRequest(request)
@@ -77,6 +82,7 @@ class QueryOneTitle(View):
     """
     进入单个主题帖, 展示该主题帖下的评论等
     """
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '进入主题帖成功', 'data': []}
         request = getRequest(request)
@@ -120,6 +126,7 @@ class QueryOneTitle(View):
 class QueryTitle(View):
     """按名称查找主题帖, 同时可用于所有主题帖的查询
     """
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '按名查询主题帖成功', 'data': []}
         query_string = eval(request.body)

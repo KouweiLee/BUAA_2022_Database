@@ -19,8 +19,6 @@ def user_authenticate(isNeedAdmin):
     def decorator(view_func):
         def _wrapped_view(self, request, *args, **kwargs):
             try:
-                # print("request", request)
-                # print("hele", request.META is None)
                 auth = request.META.get('HTTP_AUTHORIZATION').split()
             except AttributeError as e:
                 print(e)
@@ -56,7 +54,7 @@ def getNowTime():
     """
     获取当前时间
     """
-    return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 def getRequest(request):

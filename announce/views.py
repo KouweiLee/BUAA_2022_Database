@@ -6,6 +6,7 @@ from utils.Def import *
 
 class GetAllDevelops(View):
     """获取所有社团发展历史信息"""
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '获取全部历史信息成功', 'data': []}
         try:
@@ -34,6 +35,7 @@ class GetAllDevelops(View):
 
 class AddDevelop(View):
     """创建社团发展历史信息"""
+    @user_authenticate(True)
     def post(self, request):
         res = {'code': 400, 'msg': '创建社团历史信息成功', 'data': []}
         request = getRequest(request)
@@ -55,6 +57,7 @@ class AddDevelop(View):
 
 class ChangeDevelop(View):
     """修改社团发展信息"""
+    @user_authenticate(True)
     def post(self,request):
         res = {'code': 400, 'msg': '修改社团历史信息成功', 'data': []}
         request = getRequest(request)
@@ -75,6 +78,7 @@ class ChangeDevelop(View):
 
 class GetAllMembers(View):
     """获取所有成员信息"""
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '获取所有成员信息成功', 'data': []}
         request = getRequest(request)
@@ -95,6 +99,7 @@ class GetAllMembers(View):
 
 class AddMember(View):
     """增加成员信息"""
+    @user_authenticate(True)
     def post(self, request):
         # if request.user.is_authenticated:
         #     print("hehhe")
@@ -116,6 +121,7 @@ class AddMember(View):
         return JsonResponse(res)
 
 class GetAllNames(View):
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '获取所有用户username和name成功', 'data': []}
         try:

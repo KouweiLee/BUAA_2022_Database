@@ -12,6 +12,7 @@ class AddWork(View):
     """
     添加作业, 前端传作业名和课程id
     """
+    @user_authenticate(True)
     def post(self, request):
         res = {'code': 400, 'msg': '添加作业成功', 'data': []}
         request = getRequest(request)
@@ -32,7 +33,7 @@ class ClickWork(View):
     """
     点击具体作业, 前端向后端传作业id, 后端返回该作业的具体信息
     """
-
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '点击具体作业成功', 'data': []}
         request = getRequest(request)
@@ -56,6 +57,7 @@ class ClickWork(View):
 class ChangeWork(View):
     """修改作业
     """
+    @user_authenticate(True)
     def post(self, request):
         res = {'code': 400, 'msg': '修改作业成功', 'data': []}
         request = getRequest(request)
@@ -82,7 +84,7 @@ class ChangeWork(View):
 class DeleteWork(View):
     """删除作业信息
     """
-
+    @user_authenticate(True)
     def post(self, request):
         res = {'code': 400, 'msg': '删除作业成功', 'data': []}
         request = getRequest(request)
@@ -102,7 +104,7 @@ class GetAllWorks(View):
         前端: 课程id
         后端: 所有作业id+姓名
     """
-
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '获取所有作业成功', 'data': []}
         request = getRequest(request)
@@ -124,6 +126,7 @@ class GetAllWorks(View):
 class UploadWork(View):
     """用户上传自己的作业, 作业名命名格式: username_workId_filename
     """
+    @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '上传作业成功', 'data': []}
         try:
@@ -151,6 +154,7 @@ class UploadWork(View):
 class CorrectWorks(View):
     """获取所有作业附件
     """
+    @user_authenticate(True)
     def post(self, request):
         res = {'code': 400, 'msg': '获取所有作业附件成功', 'data': []}
         request = getRequest(request)
@@ -176,6 +180,7 @@ class CorrectWorks(View):
         return JsonResponse(res)
 
 class DeleteWorkRecord(View):
+    @user_authenticate(True)
     def post(self, request):
         res = {'code': 400, 'msg': '删除作业附件成功', 'data': []}
         request = getRequest(request)
@@ -192,6 +197,7 @@ class DeleteWorkRecord(View):
 class GiveScore2Work(View):
     """给作业一个分数
     """
+    @user_authenticate(True)
     def post(self, request):
         res = {'code': 400, 'msg': '批改作业成功', 'data': []}
         request = getRequest(request)
@@ -208,6 +214,7 @@ class GiveScore2Work(View):
 
 class DownloadOne(APIView):
     """下载单个作业附件"""
+    @user_authenticate(True)
     def post(self, request):
         res = {'code': 400, 'msg': '下载作业失败', 'data': []}
         id = int(request.data.get("id"))
