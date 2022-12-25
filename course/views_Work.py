@@ -126,7 +126,7 @@ class GetAllWorks(View):
 class UploadWork(View):
     """用户上传自己的作业, 作业名命名格式: username_workId_filename
     """
-    @user_authenticate(False)
+    # @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '上传作业成功', 'data': []}
         try:
@@ -222,7 +222,7 @@ class DownloadOne(APIView):
         filename = ""
         try:
             sqlHelper = SqlHelper()
-            filename = sqlHelper.select(TB_HOMEWORK_USER, ["name"], {"id":id})[0][0]
+            filename = sqlHelper.select(TB_HOMEWORK_USER, ["filename"], {"id":id})[0][0]
             print(filename)
         except BaseException as e:
             print(e)

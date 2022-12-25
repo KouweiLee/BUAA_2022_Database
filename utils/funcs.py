@@ -24,9 +24,11 @@ def user_authenticate(isNeedAdmin):
                 print(e)
                 return result(400, "No authenticate header")
 
-            if auth[0].lower() == 'token':
+            if auth[0].lower() == 'JWT':
                 try:
                     dict = jwt.decode(auth[1], "123456", algorithms=['HS256'])
+                    # print("hear")
+                    print(isNeedAdmin, dict.get("isAdmin"))
                     if isNeedAdmin and dict.get("isAdmin") is False:#如果需要管理员权限，但不是管理员
                         return result(400,"You are not an Admin!!!")
                 except jwt.ExpiredSignatureError:

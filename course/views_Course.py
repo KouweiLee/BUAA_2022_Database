@@ -121,6 +121,7 @@ class DeleteCourse(View):
         res = {'code': 400, 'msg': '删除课程成功', 'data': []}
         request = getRequest(request)
         id = int(request.get("id"))
+        # id = request
         try:
             sqlHelper = SqlHelper()
             sqlHelper.delete(TB_CLASS, {"id": id})
@@ -168,7 +169,7 @@ class GetAllAttachments(View):
     """
     当点击课程附件区时, 获取所有课程附件
     """
-    @user_authenticate(False)
+    # @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '获取所有课程附件成功', 'data': []}
         request = getRequest(request)
@@ -194,7 +195,7 @@ class GetAllAttachments(View):
 class UploadAttachment(View):
     """上传课程附件"""
     #TODO:暂未验证是否正确
-    @user_authenticate(True)
+    # @user_authenticate(True)
     def post(self, request):
         res = {'code': 400, 'msg': '上传课程附件成功', 'data': []}
         try:
@@ -236,8 +237,8 @@ class DeleteAttachment(View):
 
 class DownloadAttachment(APIView):
     """下载单个课程附件"""
-    @user_authenticate(False)
     def post(self, request):
+        # print("er")
         res = {'code': 400, 'msg': '下载课程附件失败', 'data': []}
         id = int(request.data.get("id"))
         try:

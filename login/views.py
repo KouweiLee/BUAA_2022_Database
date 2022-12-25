@@ -18,7 +18,7 @@ class Login(View):
         password = request.get("password")
         try:
             sqlHelper = SqlHelper()
-            result = sqlHelper.select('tb_user', ["password", "isSuperUser", "name"], {"username": username})
+            result = sqlHelper.select('tb_user', ["password", "isSuperUser", "name", "numOfTitles"], {"username": username})
             if result:
                 key = result[0][0]
                 if check_password(password, key):
@@ -30,6 +30,7 @@ class Login(View):
                         res['data']['isSuperUser'] = True
                     res['data']['token'] = getJwt(res['data']['isSuperUser'])
                     res['data']['name'] = result[0][2]
+                    res['data']['num'] = result[0][3]
                     return JsonResponse(res)
                 else:
                     res['msg'] = "密码错误"
@@ -144,7 +145,7 @@ class AddPic(View):
     """
     上传用户的图片
     """
-    @user_authenticate(False)
+    # @user_authenticate(False)
     def post(self, request):
         res = {'code': 400, 'msg': '上传图片成功', 'data': []}
         try:
